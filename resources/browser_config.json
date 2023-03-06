@@ -1,0 +1,9 @@
+{
+  "browser": "chrome",
+  "options": [
+    "--start-maximized",
+    "--incognito",
+    "Zoom 75%"
+  ],
+  "EXPLICIT_WAIT_SECONDS": 5
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://demoqa.com/",
+  "framesList": [
+    "Parent frame",
+    "Child Iframe"
+  ]
+}
