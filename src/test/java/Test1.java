@@ -2,6 +2,7 @@ import BaseTest.BaseTest;
 import Driver.*;
 import Elements.Frame;
 import PageObjects.*;
+import Utils.AlertUtil;
 import Utils.BrowserUtils;
 import Utils.JsonIO;
 import Utils.RandomString;
@@ -30,48 +31,47 @@ public class Test1 extends BaseTest {
         Navigation navigation = new Navigation();
         AlertForm alertForm = new AlertForm();
 
-        Driver.getDriver().get((String)JsonIO.readSimple(TEST_CONFIG_PATH,"url"));
         Assert.assertTrue(homePage.isFormOpen(),"Home page wasn't opened");
 
         logger.info("ASSERT 1 - Home Page opened");
 
-        homePage.openCard("Alerts");
+        homePage.openAlertsFrameWindows();
         navigation.isFormOpen();
 
-        navigation.openExactMenuItem("Alerts");
-        alertForm.isFormOpen();
-        Assert.assertTrue(alertForm.alertsWrapperVisible(),"Alerts wrapper wasn't opened");
+        navigation.openAlertsFrameWindows();
+
+        Assert.assertTrue(alertForm.isFormOpen(),"Alerts wrapper wasn't opened");
 
         logger.info("ASSERT 2 - Alerts form opened");
 
-        alertForm.alertButton.click();
-        Alert alert = BrowserUtils.switchToAlert();
-        Assert.assertEquals(alert.getText(),"You clicked a button","Simple alert wasn't opened");
+        alertForm.getAlertButton().click();
+        AlertUtil.switchToAlert();
+        Assert.assertEquals(AlertUtil.getAlertMessage(),"You clicked a button","Simple alert wasn't opened");
 
         logger.info("ASSERT 3 - Simple alert opened");
 
-        alert.accept();
+        AlertUtil.acceptAlert();
         Assert.assertFalse(alertForm.alertIsActive(),"Alert wasn't closed");
 
         logger.info("ASSERT 4 - Simple alert closed");
 
-        alertForm.confirmButton.click();
-        alert = BrowserUtils.switchToAlert();
-        Assert.assertEquals(alert.getText(),"Do you confirm action?","Confirm alert wasn't opened");
+        alertForm.getConfirmButton().click();
+        AlertUtil.switchToAlert();
+        Assert.assertEquals(AlertUtil.getAlertMessage(),"Do you confirm action?","Confirm alert wasn't opened");
 
         logger.info("ASSERT 5 - Confirm alert opened");
 
-        alert.accept();
+        AlertUtil.acceptAlert();
         Assert.assertFalse(alertForm.alertIsActive(),"Alert wasn't closed");
-        Assert.assertEquals(alertForm.confirmText.getElement().getText(),"You selected Ok",
+        Assert.assertEquals(alertForm.getConfirmText().getElement().getText(),"You selected Ok",
                 "You didn't select ok in confirm alert");
 
         logger.info("ASSERT 6 - Confirm alert closed and 'Ok' was selected");
 
-        BrowserUtils.scrollToWebElement(alertForm.pormtButton.getElement());
-        alertForm.pormtButton.click();
-        alert = BrowserUtils.switchToAlert();
-        Assert.assertEquals(alert.getText(),"Please enter your name","Promt alert wasn't opened");
+        BrowserUtils.scrollToWebElement(alertForm.getPromtButton().getElement());
+        alertForm.getPromtButton().click();
+        AlertUtil.switchToAlert();
+        Assert.assertEquals(AlertUtil.getAlertMessage(),"Please enter your name","Promt alert wasn't opened");
 
         logger.info("ASSERT 7 - Prompt alert opened");
 
@@ -79,10 +79,10 @@ public class Test1 extends BaseTest {
 
         logger.info("Random string generated: " + randomString);
 
-        alert.sendKeys(randomString);
-        alert.accept();
+        AlertUtil.fillAlertInput(randomString);
+        AlertUtil.acceptAlert();
         Assert.assertFalse(alertForm.alertIsActive(),"Alert wasn't closed");
-        Assert.assertEquals(alertForm.promtText.getElement().getText(),
+        Assert.assertEquals(alertForm.getPromtText().getElement().getText(),
                 String.format("You entered %s",randomString),
                 "You didn't select ok in confirm alert");
 
@@ -102,43 +102,42 @@ public class Test1 extends BaseTest {
 
         ArrayList<String> expected = (ArrayList<String>)JsonIO.readSimple(TEST_CONFIG_PATH,"framesList");
 
-        Driver.getDriver().get((String)JsonIO.readSimple(TEST_CONFIG_PATH,"url"));
         Assert.assertTrue(homePage.isFormOpen(),"Home page wasn't opened");
 
         logger.info("ASSERT 1 - Home Page opened");
 
-        homePage.openCard("Alerts");
+        homePage.openAlertsFrameWindows();
         navigation.isFormOpen();
 
-        navigation.openExactMenuItem("Nested Frames");
+        navigation.openNestedFrames();
         Assert.assertTrue(nestedFramesForm.isFormOpen(),"Nested Frames wasn't opened");
 
         logger.info("ASSERT 2 - Nested Frames Page opened");
 
         ArrayList<String> listOfFrame = new ArrayList<>();
-        nestedFramesForm.parentFrame.switchToFrame();
-        listOfFrame.add(nestedFramesForm.parentFrame.searchTextInFrame());
+        nestedFramesForm.getParentFrame().switchToFrame();
+        listOfFrame.add(nestedFramesForm.getParentFrame().searchTextInFrame());
 
-        nestedFramesForm.childFrame.switchToFrame();
-        listOfFrame.add(nestedFramesForm.childFrame.searchTextInFrame());
+        nestedFramesForm.getChildFrame().switchToFrame();
+        listOfFrame.add(nestedFramesForm.getChildFrame().searchTextInFrame());
 
         assertThat(listOfFrame).containsExactlyInAnyOrderElementsOf(expected);
 
         logger.info("ASSERT 2 - There are messages: Parent frame, Child Iframe");
 
         Frame.switchToDefaultFrame();
-        navigation.openExactMenuItem("Frames");
+        navigation.openFrames();
 
         Assert.assertTrue(frameForm.isFormOpen());
 
         logger.info("ASSERT 3 - Frames Page opened");
 
-        frameForm.bigFrame.switchToFrame();
-        String bigFrameText = frameForm.bigFrame.searchTextInFrame();
+        frameForm.getBigFrame().switchToFrame();
+        String bigFrameText = frameForm.getBigFrame().searchTextInFrame();
         Frame.switchToDefaultFrame();
 
-        frameForm.smallFrame.switchToFrame();
-        String smallFrameText = frameForm.smallFrame.searchTextInFrame();
+        frameForm.getSmallFrame().switchToFrame();
+        String smallFrameText = frameForm.getSmallFrame().searchTextInFrame();
         Frame.switchToDefaultFrame();
 
         assertThat(bigFrameText).as("Text in upper frame is equal with in lower frame ").isEqualTo(smallFrameText);
@@ -157,20 +156,19 @@ public class Test1 extends BaseTest {
         WebTables webTables = new WebTables();
         RegistrationForm registrationForm = new RegistrationForm();
 
-        Driver.getDriver().get((String)JsonIO.readSimple(TEST_CONFIG_PATH,"url"));
         Assert.assertTrue(homePage.isFormOpen(),"Home page wasn't opened");
 
         logger.info("ASSERT 1 - Home Page opened");
 
-        homePage.openCard("Elements");
+        homePage.openElements();
         navigation.isFormOpen();
 
-        navigation.openExactMenuItem("Web Tables");
+        navigation.openWebTables();
         Assert.assertTrue(webTables.isFormOpen(),"Web Tables wasn't opened");
 
         logger.info("ASSERT 2 - Web Tables Page opened");
 
-        webTables.addButton.click();
+        webTables.getAddButton().click();
 
         Assert.assertTrue(registrationForm.isFormOpen(),"Registration form wasn't opened");
 
@@ -178,6 +176,8 @@ public class Test1 extends BaseTest {
 
 
         registrationForm.fillRegistrationForm(user);
+        registrationForm.submitRegistration();
+
         Assert.assertTrue(registrationForm.isClosed(),"Registration form wasn't closed");
 
         assertThat(webTables.getTableUsers()).as("There is no such users in table").contains(user);
@@ -215,21 +215,19 @@ public class Test1 extends BaseTest {
         SamplePage samplePage = new SamplePage();
         LinksForm linksForm = new LinksForm();
 
-        Driver.getDriver().get((String)JsonIO.readSimple(TEST_CONFIG_PATH,"url"));
         Assert.assertTrue(homePage.isFormOpen(),"Home page wasn't opened");
 
         logger.info("ASSERT 1 - Home Page opened");
 
-        homePage.openCard("Alerts");
+        homePage.openAlertsFrameWindows();
         navigation.isFormOpen();
-        navigation.openExactMenuItem("Browser Windows");
+        navigation.openBrowserWindows();
 
         Assert.assertTrue(browserWindowsForm.isFormOpen(),"Alerts wrapper wasn't opened");
 
         logger.info("ASSERT 2 - Browser Windows form opened");
 
-        BrowserUtils.rememberTabHandle();
-        browserWindowsForm.newTabButton.click();
+        browserWindowsForm.getNewTabButton().click();
         BrowserUtils.switchNextWindow();
 
         Assert.assertTrue(samplePage.isFormOpen(),"Sample Page wasn't opened");
@@ -245,17 +243,15 @@ public class Test1 extends BaseTest {
         logger.info("ASSERT 4 - Tab closed, returning to previous page");
 
         navigation.isFormOpen();
-        navigation.openExactDropDownList("Elements");
+        navigation.openNavElements();
         navigation.isFormOpen();
-        navigation.openExactMenuItem("Links");
+        navigation.openLinks();
 
         Assert.assertTrue(linksForm.isFormOpen(),"Links wrapper wasn't opened");
 
         logger.info("ASSERT 5 - Links Page opened");
 
-        BrowserUtils.rememberTabHandle();
-
-        linksForm.homeLink.click();
+        linksForm.getHomeLink().click();
         BrowserUtils.switchNextWindow();
         Assert.assertTrue(homePage.isFormOpen(),"Links wrapper wasn't opened");
 

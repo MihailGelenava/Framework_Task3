@@ -9,12 +9,25 @@ public class FrameForm extends BaseForm {
     private static final By uniqueLocator = By.id("frame1Wrapper");
     private static final String name = "Frame form";
 
-    private static final By frame1Locator = By.id("frame1");
-    private static final By frame2Locator = By.id("frame2");
+    private final Frame bigFrame = new Frame(
+            By.id("frame1"),
+            "Big frame",
+            By.id("sampleHeading")
+            );
 
-    public final Frame bigFrame = new Frame(frame1Locator,"Big frame");
-    public final Frame smallFrame = new Frame(frame2Locator,"Small frame");
+    private final Frame smallFrame = new Frame(
+            By.id("frame2"),
+            "Small frame",
+            By.id("sampleHeading")
+            );
 
+    public Frame getBigFrame(){
+        return bigFrame;
+    }
+
+    public Frame getSmallFrame(){
+        return smallFrame;
+    }
 
     public FrameForm() {
         super(uniqueLocator, name);

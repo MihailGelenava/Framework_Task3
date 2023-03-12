@@ -1,15 +1,13 @@
 package Utils;
 
 import Driver.Driver;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class BrowserUtils {
-
-    private static String rememberedTabHandle;
 
     public static int getWindowsCount (){
         return Driver.getDriver().getWindowHandles().size();
@@ -31,19 +29,9 @@ public class BrowserUtils {
         Driver.getDriver().close();
     }
 
-    public static void rememberTabHandle(){
-        rememberedTabHandle = Driver.getDriver().getWindowHandle();
-    }
-
     public static void switchToDefaultWindow(){
-        if (rememberedTabHandle != null){
-            Driver.getDriver().switchTo().window(rememberedTabHandle);
-        } else{
-            throw new RuntimeException("You need to pick default window before open it");
-        }
+        ArrayList<String> tabs = new ArrayList<String>(Driver.getDriver().getWindowHandles());
+        Driver.getDriver().switchTo().window(tabs.get(0));
     }
 
-    public static Alert switchToAlert(){
-        return Driver.getDriver().switchTo().alert();
-    }
 }

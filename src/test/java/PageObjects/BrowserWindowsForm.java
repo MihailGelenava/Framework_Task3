@@ -8,10 +8,13 @@ public class BrowserWindowsForm extends BaseForm {
     private static final By uniqueLocator = By.id("browserWindows");
     private static final String name = "Browser Windows form";
 
-    private static final By newTabLocator = By.id("tabButton");
+    private Button newTabButton = new Button(
+            By.id("tabButton"),
+            "New Tab button");
 
-    public Button newTabButton = new Button(newTabLocator,"New Tab button");
-
+    public Button getNewTabButton(){
+        return newTabButton;
+    }
 
     public BrowserWindowsForm() {
         super(uniqueLocator, name);

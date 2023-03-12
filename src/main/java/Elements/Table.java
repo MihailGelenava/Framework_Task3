@@ -1,18 +1,14 @@
 package Elements;
 
-import BasePageObjects.BaseElement;
-import Driver.Driver;
+import BasePageObjects.BaseForm;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class Table extends BaseElement {
+public class Table extends BaseForm {
 
     private final By rowsLocator;
-
-    private List<WebElement> tableRows;
-
 
     public Table(By tableLocator, String name, By rowsLocator) {
         super(tableLocator, name);
@@ -20,11 +16,10 @@ public class Table extends BaseElement {
     }
 
     public List<WebElement> getTableRows(){
-        tableRows = Driver.getDriver().findElements(rowsLocator);
 
-        logger.info("From " + getName() + " gotten list of rows");
+        logger.info("From " + getFormName() + " gotten list of rows");
 
-        return tableRows;
+        return getElements(rowsLocator);
     }
 
 }

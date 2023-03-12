@@ -8,36 +8,60 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.UnhandledAlertException;
 
 public class AlertForm extends BaseForm {
-    private static final By uniqueLocator = By.id("javascriptAlertsWrapper");
+    private static final By alertsWrapper = By.id("javascriptAlertsWrapper");
     private static final String name = "Alert form";
 
-    private static final By alertsWrapper = By.id("javascriptAlertsWrapper");
-    private static final By alertButtonLocator = By.id("alertButton");
-    private static final By confirmButtonLocator = By.id("confirmButton");
-    private static final By confirmResultLocator = By.id("confirmResult");
-    private static final By promtButtonLocator = By.id("promtButton");
-    private static final By promtResultLocator = By.id("promptResult");
+    private final Button alertButton = new Button(
+            By.id("alertButton"),
+            "Button shows alert");
 
-    public final Button alertButton = new Button(alertButtonLocator,"Button shows alert");
-    public final Button confirmButton = new Button(confirmButtonLocator,"Button shows confirm alert");
-    public final Text confirmText = new Text(confirmResultLocator,"Confirm result");
-    public final Button pormtButton = new Button(promtButtonLocator,"Button shows promt alert");
-    public final Text promtText = new Text(promtResultLocator,"Prompt result");
+    private final Button confirmButton = new Button(
+            By.id("confirmButton"),
+            "Button shows confirm alert");
 
-    public boolean alertsWrapperVisible(){
-        return WaitsUtil.waitForElementVisible(alertsWrapper);
-    }
+    private final Text confirmText = new Text(
+            By.id("confirmResult"),
+            "Confirm result");
+
+    private final Button promtButton = new Button(
+            By.id("promtButton"),
+            "Button shows promt alert");
+
+    private final Text promtText = new Text(
+            By.id("promptResult"),
+            "Prompt result");
+
 
     public boolean alertIsActive(){
         try{
-            WaitsUtil.waitForElementPresence(uniqueLocator);
+            WaitsUtil.waitForElementPresence(alertsWrapper);
             return false;
         } catch(UnhandledAlertException e){
             return true;
         }
     }
 
+    public Button getAlertButton(){
+        return alertButton;
+    }
+
+    public Button getConfirmButton(){
+        return confirmButton;
+    }
+
+    public Text getConfirmText(){
+        return confirmText;
+    }
+
+    public Button getPromtButton(){
+        return promtButton;
+    }
+
+    public Text getPromtText(){
+        return promtText;
+    }
+
     public AlertForm() {
-        super(uniqueLocator, name);
+        super(alertsWrapper, name);
     }
 }

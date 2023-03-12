@@ -8,9 +8,13 @@ public class LinksForm extends BaseForm {
     private static final By uniqueLocator = By.id("linkWrapper");
     private static final String name = "Elements -> Links page";
 
-    private static final By homeLinkLocator = By.id("simpleLink");
+    private Link homeLink = new Link(
+            By.id("simpleLink"),
+            "Home link");
 
-    public Link homeLink = new Link(homeLinkLocator,"Home link");
+    public Link getHomeLink(){
+        return homeLink;
+    }
 
     public LinksForm() {
         super(uniqueLocator, name);

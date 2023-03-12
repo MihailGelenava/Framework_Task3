@@ -16,10 +16,7 @@ public class Input extends BaseElement {
         logger.info("In " + getName() + " sent text: " + text);
     }
     public void sendText(int number){
-        getElement().clear();
-        getElement().sendKeys(Integer.toString(number));
-
-        logger.info("In " + getName() + " sent text: " + number);
+        sendText(Integer.toString(number));
     }
 
 }

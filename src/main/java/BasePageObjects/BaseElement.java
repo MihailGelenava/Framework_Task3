@@ -26,9 +26,10 @@ public abstract class BaseElement {
     public void click(){
         WaitsUtil.waitForElementPresence(locator);
         WaitsUtil.waitForElementToBeClickable(locator);
-        getElement().click();
 
         logger.info(getName() + " clicked");
+
+        getElement().click();
     }
     public String getName(){
         return name;
